@@ -28,7 +28,6 @@
 #    command: /bin/sh -c "allure --version && allure generate report --clean -o allure-report"
 #    working_dir: /usr/workspace
 
-version: '3.8'
 
 services:
   # Готовый браузер (скачается быстро, собирать не нужно)
@@ -57,10 +56,20 @@ services:
       - .:/usr/workspace
     command: pytest -sv --alluredir=report --ignore=gh-pages-dir
 
+#  report:
+#    image: ui:v1
+#    build: .
+#    volumes:
+#      - ./:/usr/workspace
+#    command: /bin/sh -c "allure --version && allure generate report --clean -o allure-report"
+#    working_dir: /usr/workspace
+
   report:
-    image: ui:v1
-    build: .
+    image: frankescobar/allure-docker-service:latest # Используем готовый сервис
+    environment:
+      - CHECK_RESULTS_EVERY_SECONDS=NONE
+      - KEEP_HISTORY=TRUE
     volumes:
-      - ./:/usr/workspace
-    command: /bin/sh -c "allure --version && allure generate report --clean -o allure-report"
-    working_dir: /usr/workspace
+      - .:/app # Мапим корень проекта
+    # Команда генерации для этого образа чуть другая
+    command: allure generate /app/report -o /app/allure-report --clean
