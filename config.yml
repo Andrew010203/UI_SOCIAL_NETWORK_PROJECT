@@ -26,7 +26,9 @@ jobs:
             -e PYTEST_ADDOPTS="--color=yes" \
             -e TOKEN="${{ secrets.TOKEN }}" \
             -e ADMIN_LOGIN="${{ secrets.ADMIN_LOGIN }}" \
+            -e ADMIN_PASSWORD="${{ secrets.ADMIN_PASSWORD }}" \
             -e FRIEND_LOGIN="${{ secrets.FRIEND_LOGIN }}" \
+            -e FRIEND_PASSWORD="${{ secrets.FRIEND_PASSWORD }}" \
             -e CHAT_ID="${{ secrets.CHAT_ID }}" \
             -e GITHUB_ACTIONS="true" \
             -e GITHUB_REPOSITORY="${{ github.repository }}" \
