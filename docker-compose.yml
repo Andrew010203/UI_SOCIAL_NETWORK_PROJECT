@@ -40,16 +40,27 @@ services:
 
   # Твой код
   ui_tests:
+    build: .
     image: ui:v1
     depends_on:
       - chrome_server
     environment:
       - SELENIUM_REMOTE_URL=http://chrome_server:4444/wd/hub
-      # Прокидываем твои логины/пароли
+      # Прокидываем логины/пароли
       - ADMIN_LOGIN=${ADMIN_LOGIN}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD}
       - FRIEND_LOGIN=${FRIEND_LOGIN}
+      - FRIEND_PASSWORD=${FRIEND_PASSWORD}
       - TOKEN=${TOKEN}
       - CHAT_ID=${CHAT_ID}
     volumes:
       - .:/usr/workspace
     command: pytest -sv --alluredir=report
+
+  report:
+    image: ui:v1
+    build: .
+    volumes:
+      - ./:/usr/workspace
+    command: /bin/sh -c "allure --version && allure generate report --clean -o allure-report"
+    working_dir: /usr/workspace
