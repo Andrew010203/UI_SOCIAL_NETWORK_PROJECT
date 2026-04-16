@@ -1,0 +1,3 @@
+"Status","Start Time","Stop Time","Duration in ms","Parent Suite","Suite","Sub Suite","Test Class","Test Method","Name","Description"
+"passed","Thu Apr 16 13:13:25 UTC 2026","Thu Apr 16 13:13:28 UTC 2026","3320","tests.auth","test_registration","TestRegistration","","","Registration",""
+"passed","Thu Apr 16 13:13:23 UTC 2026","Thu Apr 16 13:13:24 UTC 2026","1918","tests.auth","test_login","TestLogin","","","Login as an existing user ('friend') via UI",""

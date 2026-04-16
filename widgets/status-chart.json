@@ -1,0 +1,1 @@
+[{"uid":"86578d544eeaef9f","name":"Registration","time":{"start":1776345205333,"stop":1776345208653,"duration":3320},"status":"passed","severity":"critical"},{"uid":"977ca851c9595472","name":"Login as an existing user ('friend') via UI","time":{"start":1776345203040,"stop":1776345204958,"duration":1918},"status":"passed","severity":"blocker"}]
