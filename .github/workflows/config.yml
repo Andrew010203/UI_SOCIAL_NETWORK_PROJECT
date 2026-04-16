@@ -35,9 +35,9 @@ jobs:
             -e GITHUB_RUN_ID="${{ github.run_id }}" \
             ui_tests
 
-#      - name: Fix permissions
-#        if: always()
-#        run: sudo chown -R $USER:$USER .
+      - name: Fix permissions
+        if: always()
+        run: sudo chown -R $USER:$USER .
 
       - name: Copy Allure history
         if: always()
