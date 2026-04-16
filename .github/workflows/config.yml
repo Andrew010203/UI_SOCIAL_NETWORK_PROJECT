@@ -35,9 +35,9 @@ jobs:
             -e GITHUB_RUN_ID="${{ github.run_id }}" \
             ui_tests
 
-      - name: Fix permissions
-        if: always()
-        run: sudo chown -R $USER:$USER .
+#      - name: Fix permissions
+#        if: always()
+#        run: sudo chown -R $USER:$USER .
 
       - name: Copy Allure history
         if: always()
@@ -51,6 +51,10 @@ jobs:
         if: always()  # Запускать, даже если тесты упали
         # Контейнер возьмет данные из report/ и создаст allure-report/
         run: docker compose up report
+
+      - name: Fix permissions
+        if: always()
+        run: sudo chown -R $USER:$USER .
 
       - name: Deploy to Github Pages
         if: always()  # Деплоить отчет всегда
