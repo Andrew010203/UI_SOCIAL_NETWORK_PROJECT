@@ -55,7 +55,7 @@ services:
       - CHAT_ID=${CHAT_ID}
     volumes:
       - .:/usr/workspace
-    command: pytest -sv --alluredir=report
+    command: pytest -sv --alluredir=report --ignore=gh-pages-dir
 
   report:
     image: ui:v1
