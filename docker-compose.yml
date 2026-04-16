@@ -1,43 +1,11 @@
-#services:
-#  ui_social_network:
-#    image: ui:v1
-#    build:
-#      context: .
-#      dockerfile: Dockerfile
-#    environment:
-#      - TOKEN=${TOKEN}
-#      - CHAT_ID=${CHAT_ID}
-#      - BEARER_TOKEN=${BEARER_TOKEN}
-#      - GITHUB_ACTIONS=${GITHUB_ACTIONS}
-#      - GITHUB_REPOSITORY=${GITHUB_REPOSITORY}
-#      - GITHUB_RUN_ID=${GITHUB_RUN_ID}
-#    volumes:
-#
-#      - ./:/usr/workspace
-#    command: /bin/sh -c "python -m pytest -sv --reruns 2 --reruns-delay 1 -o log_cli=true --alluredir=report --ignore=gh-pages-dir"
-#
-#    shm_size: 2gb
-#    tty: true
-#
-#
-#  report:
-#    image: ui:v1
-#    build: .
-#    volumes:
-#      - ./:/usr/workspace
-#    command: /bin/sh -c "allure --version && allure generate report --clean -o allure-report"
-#    working_dir: /usr/workspace
-
-
 services:
-  # Готовый браузер (скачается быстро, собирать не нужно)
+  # Готовый браузер (скачивается быстро, собирать не нужно)
   chrome_server:
     image: selenium/standalone-chrome:latest
     shm_size: 2gb
     ports:
       - "4444:4444"
 
-  # Твой код
   ui_tests:
     build: .
     image: ui:v1
@@ -56,20 +24,9 @@ services:
       - .:/usr/workspace
     command: pytest -sv --alluredir=report --ignore=gh-pages-dir
 
-#  report:
-#    image: ui:v1
-#    build: .
-#    volumes:
-#      - ./:/usr/workspace
-#    command: /bin/sh -c "allure --version && allure generate report --clean -o allure-report"
-#    working_dir: /usr/workspace
-
   report:
-    image: frankescobar/allure-docker-service:latest # Используем готовый сервис
-    environment:
-      - CHECK_RESULTS_EVERY_SECONDS=NONE
-      - KEEP_HISTORY=TRUE
+    image: ui:v1
     volumes:
-      - .:/app # Мапим корень проекта
-    # Команда генерации для этого образа чуть другая
-    command: allure generate /app/report -o /app/allure-report --clean
+      - .:/usr/workspace
+    working_dir: /usr/workspace
+    command: allure generate report -o allure-report --clean
