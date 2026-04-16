@@ -1,0 +1,31 @@
+# Секреты и сессии
+.env
+cookies.json
+
+# Виртуальное окружение
+venv/
+.venv/
+env/
+
+# Python cache (мусор от компиляции)
+**/__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# PyCharm / IDE (настройки среды)
+.idea/
+.vscode/
+*.swp
+
+# Pytest / Тестовые артефакты
+.pytest_cache/
+.pytest.log
+geckodriver.log
+chromedriver.exe
+msedgedriver.exe
+
+# Отчеты (Allure и прочие)
+report/
+allure-report/
+screenshots/

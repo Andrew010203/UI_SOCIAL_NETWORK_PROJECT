@@ -1,0 +1,61 @@
+name: UI Tests
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  ui-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Checkout gh-pages (for history)
+        uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+          path: gh-pages-dir
+
+
+
+      - name: Run UI Tests
+        run: |
+          docker compose run --rm \
+            -e PYTEST_ADDOPTS="--color=yes" \
+            -e TOKEN="${{ secrets.TOKEN }}" \
+            -e ADMIN_LOGIN="${{ secrets.ADMIN_LOGIN }}" \
+            -e FRIEND_LOGIN="${{ secrets.FRIEND_LOGIN }}" \
+            -e CHAT_ID="${{ secrets.CHAT_ID }}" \
+            -e GITHUB_ACTIONS="true" \
+            -e GITHUB_REPOSITORY="${{ github.repository }}" \
+            -e GITHUB_RUN_ID="${{ github.run_id }}" \
+            ui_tests
+
+      - name: Fix permissions
+        if: always()
+        run: sudo chown -R $USER:$USER .
+
+      - name: Copy Allure history
+        if: always()
+        run: |
+          mkdir -p report/history
+          if [ -d "gh-pages-dir/history" ]; then
+            cp -R gh-pages-dir/history/* report/history/
+          fi
+
+      - name: Generate Allure-report
+        if: always()  # Запускать, даже если тесты упали
+        # Контейнер возьмет данные из report/ и создаст allure-report/
+        run: docker compose up report
+
+      - name: Deploy to Github Pages
+        if: always()  # Деплоить отчет всегда
+        uses: JamesIves/github-pages-deploy-action@4.1.5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+#          token: ${{ secrets.CI_TOKEN }}
+          branch: gh-pages
+          folder: allure-report
+          clean: false
