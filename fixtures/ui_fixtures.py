@@ -17,7 +17,7 @@ def driver(request):
     options.browser_version = "stable"
     options.add_argument("--window-size=1920,1080")
     # Активация headless режима
-    options.add_argument("--headless=new")
+    #options.add_argument("--headless=new")
     # Необходимы для Linux/Docker в CI/CD
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")

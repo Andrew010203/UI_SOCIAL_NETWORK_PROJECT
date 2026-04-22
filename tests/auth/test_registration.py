@@ -5,6 +5,7 @@ import pytest
 import allure
 from faker import Faker
 from base.base_test import BaseTest
+from config.credentials import Credentials
 
 faker = Faker()
 
@@ -24,6 +25,30 @@ class TestRegistration(BaseTest):
         unique_password = f"Qwe_{random.randint(1000, 9999)}_qwE"
         self.registration_page().registration_as_random_user(login=unique_login, password=unique_password)
         self.registration_page().ui_helper.screenshot("registration_success")
+
+    @pytest.mark.smoke
+    @allure.story("New Account Creation")
+    @allure.title("Registration (negative)")
+    @allure.severity(allure.severity_level.CRITICAL)
+    @pytest.mark.parametrize("email, login, password, expected_error", [
+        (Credentials.FRIEND_EMAIL, "unique_user_" + faker.word(),
+         Credentials.FRIEND_PASSWORD, "already exists in our database"),  # Существующий Email в базе
+        (faker.email(), Credentials.FRIEND_LOGIN,
+         Credentials.FRIEND_PASSWORD, "username is taken"),  # Существующий login в базе
+        ("invalid-email.com", "random_user",
+         Credentials.FRIEND_PASSWORD, "Email address is invalid"),  # Невалидный формат Email в базе
+        (faker.email(), "short_pass_user", "123", "password does not meet the requirements")  # Короткий пароль
+    ])
+    def test_registration_negative(self, driver, email, login, password, expected_error):
+        self.registration_page().open()
+        self.registration_page().is_opened()
+        self.registration_page().registration_negative(login=login, password=password, email=email)
+        # Проверка: текст ошибки должен содержать ожидаемую фразу
+        actual_error = self.registration_page().get_error_message()
+        assert expected_error.lower() in actual_error.lower(), \
+            f"Expected error '{expected_error}' not found in '{actual_error}'"
+
+        #self.registration_page().ui_helper.screenshot("registration_success") # этот шаг не нужен(есть хук)
 
 
     # def test_registration_full_cycle(self, driver, email_helper):

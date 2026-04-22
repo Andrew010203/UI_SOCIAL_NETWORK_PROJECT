@@ -4,6 +4,7 @@ import random
 import pytest
 from faker import Faker
 from base.base_page import BasePage
+from config.credentials import Credentials
 from config.links import Links
 
 
@@ -40,6 +41,7 @@ class RegistrationPage(BasePage):
     _SET_DAY = ('xpath', '//a[@data-date="9"]')
     _LOGIN_BUTTON_ADMIN = ('xpath', '//input[@value="Login"]')
     _MESSAGE_REG_NOTIFICATION = ('xpath', '//div[@class="ossn-message-done"]')
+    _ERROR_MESSAGE = ("xpath", '//div[@id="ossn-signup-errors"]')
 
 
     _MONTH_POPUP = ('xpath', '//select[@class="ui-datepicker-month"]')
@@ -71,6 +73,11 @@ class RegistrationPage(BasePage):
         self._DAY_LOCATOR = ('xpath', f'//a[normalize-space(text())="{day_number}"]')
         self.ui_helper.click(self._DAY_LOCATOR)
 
+    @allure.step("Get error message")
+    def get_error_message(self):
+        # Ждем появления и возвращаем текст
+        return self.ui_helper.wait_for_visibility(self._ERROR_MESSAGE).text
+
     @allure.step("Registration as random user")
     def registration_as_random_user(self, login, password):  # login as random user
         # Заполнение полей
@@ -97,5 +104,28 @@ class RegistrationPage(BasePage):
         actual_text = message_element.text
         expected_text = "Your account has been registered!"
         assert expected_text in actual_text, f"Expected {expected_text}, but got {actual_text}"
+
+    @allure.step("Registration (negative))")
+    def registration_negative(self, login, password, email):  # Reg negative
+        # Заполнение полей
+        self.ui_helper.fill(self._FIRST_NAME_FIELD, faker.first_name())
+        self.ui_helper.fill(self._LAST_NAME_FIELD, faker.last_name())
+        self.ui_helper.fill(self._EMAIL_FIELD, email)
+        self.ui_helper.fill(self._RE_ENTER_EMAIL_FIELD, email)
+        self.ui_helper.fill(self._USERNAME_FIELD, login)
+        self.ui_helper.fill(self._PASSWORD_FIELD, password)
+        # Работа с date_picker
+        self.open_date_picker()
+        self.set_year(random.randint(1900, 2007))
+        self.set_month(random.randint(1, 12))
+        self.set_day(random.randint(1, 28))
+        # Выбор пола и согласие
+        self.ui_helper.click(self._MALE_RADIO_BUTTON)
+        self.ui_helper.click(self._CONFIRM_CHECK_BOX)
+        # Клик по кнопке регистрации
+        self.ui_helper.click(self._CREATE_AN_ACCOUNT_BUTTON)
+        #input()
+
+
 
 
