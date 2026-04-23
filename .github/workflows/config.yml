@@ -29,6 +29,7 @@ jobs:
             -e ADMIN_PASSWORD="${{ secrets.ADMIN_PASSWORD }}" \
             -e FRIEND_LOGIN="${{ secrets.FRIEND_LOGIN }}" \
             -e FRIEND_PASSWORD="${{ secrets.FRIEND_PASSWORD }}" \
+            -e FRIEND_EMAIL="${{ secrets.FRIEND_EMAIL }}" \
             -e CHAT_ID="${{ secrets.CHAT_ID }}" \
             -e GITHUB_ACTIONS="true" \
             -e GITHUB_REPOSITORY="${{ github.repository }}" \
