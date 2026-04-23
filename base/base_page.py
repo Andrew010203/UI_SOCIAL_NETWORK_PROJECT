@@ -21,8 +21,9 @@ class BasePage:
         self.driver.get(self._PAGE_URL)
 
     @allure.step("Check if page is opened")
-    def is_opened(self):
+    def is_opened(self, timeout=None):
         # self.wait.until(EC.url_to_be(self._PAGE_URL))
+        self.wait = self.wait if timeout is None else WebDriverWait(self.driver, timeout, poll_frequency=1)
         self.wait.until(EC.url_contains(self._PAGE_URL))
 
     def save_cookies(self, file_name="cookies.json"):

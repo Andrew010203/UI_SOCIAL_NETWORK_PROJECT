@@ -18,7 +18,7 @@ class TestLogin(BaseTest):
     @allure.severity(allure.severity_level.BLOCKER)
     def test_login(self, driver):
         self.login_page().open()
-        self.login_page().is_opened()
+        self.login_page().is_opened(timeout=20)
         self.login_page().login_as("friend")
         self.login_page().save_cookies()
         self.home_page().is_opened()
