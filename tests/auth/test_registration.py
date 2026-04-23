@@ -40,6 +40,7 @@ class TestRegistration(BaseTest):
         (faker.email(), "short_pass_user", "123", "password does not meet the requirements")  # Короткий пароль
     ])
     def test_registration_negative(self, driver, email, login, password, expected_error):
+        driver.delete_all_cookies()
         self.registration_page().open()
         self.registration_page().is_opened()
         self.registration_page().registration_negative(login=login, password=password, email=email)
