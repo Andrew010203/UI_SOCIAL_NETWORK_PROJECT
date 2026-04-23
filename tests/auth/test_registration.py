@@ -51,6 +51,10 @@ class TestRegistration(BaseTest):
         #self.registration_page().ui_helper.screenshot("registration_success") # этот шаг не нужен(есть хук)
 
 
+  # // div[contains(@class, 'ossn-message-error')]
+#
+#
+#     Текст ошибки: 'Invalid username or password!
     # def test_registration_full_cycle(self, driver, email_helper):
     #     # 1. Подготовка данных
     #     inbox = email_helper.create_inbox()
