@@ -10,7 +10,7 @@ jobs:
   ui-tests:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: Checkout gh-pages (for history)
         uses: actions/checkout@v4

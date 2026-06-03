@@ -1,6 +1,6 @@
 # Секреты и сессии
 .env
-cookies.json
+cookies*.json
 
 # Виртуальное окружение
 venv/
